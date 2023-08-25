@@ -1,0 +1,91 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.jfrog.artifactory'
+    id 'maven-publish'
+}
+def packageName = 'com.vnpay.extension'
+def libraryVersion = '1.0.1'
+def spaceName = "extension"
+def artifactory_username = 'hieulv'
+def artifactory_password = 'Abc@1234'
+android {
+    namespace 'com.vnpay.extension'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 19
+        targetSdk 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    dependencies.implementation "com.google.code.gson:gson:$gson_version"
+    dependencies.implementation "com.squareup.retrofit2:converter-gson:$gson_converter_version"
+}
+
+
+publishing {
+    publications {
+
+        aar(MavenPublication) {
+            groupId packageName
+            version = libraryVersion
+            artifactId "$spaceName"
+
+            artifact("$buildDir/outputs/aar/$archivesBaseName-release.aar")
+
+        }
+    }
+}
+artifactory {
+    contextUrl = 'http://10.22.7.37:8081/artifactory'
+
+    publish {
+        repository {
+            repoKey = 'SuperSecureAndroid'
+            username = artifactory_username
+            password = artifactory_password
+        }
+
+        defaults {
+            publishArtifacts = true
+
+            publications('aar')
+
+            // Properties to be attached to the published artifacts.
+            properties = ['qa.level': 'basic', 'dev.team': 'core']
+
+            // Publishes everything by default so just turn off what's not desired
+            publishIvy = false
+
+            // Is this even necessary since it's TRUE by default?
+            // Publish generated POM files to Artifactory (true by default)
+            publishPom = true
+        }
+    }
+}

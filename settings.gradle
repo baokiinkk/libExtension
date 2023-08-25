@@ -1,0 +1,31 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'http://10.22.7.37:8081/artifactory/'
+            allowInsecureProtocol = true
+        }
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'http://10.22.7.37:8081/artifactory/'
+            allowInsecureProtocol = true
+        }
+        maven {
+            url 'http://10.22.7.37:8081/artifactory/SuperSecureAndroid/'
+            allowInsecureProtocol = true
+        }
+    }
+}
+rootProject.name = "My Application"
+include ':app'
+include ':mylibrary'
