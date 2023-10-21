@@ -1,45 +1,109 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
+import android.transition.Explode
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
+import android.view.View
+import android.view.Window
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.vnpay.extension.VNPOnSwipeTouchListener
-import com.vnpay.extension.extensions.VNPBitmapExt
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.vnpay.extension.extensions.VNPRecycleviewExt.loadMore
+import com.vnpay.extension.extensions.toJson
 import com.vnpay.extension.launch.VnpayLaunch
 
+
 class MainActivity : AppCompatActivity() {
+    val adapterMain by lazy { AdapterMain() }
+    val recycleview by lazy { findViewById<RecyclerView>(R.id.recycleview) }
+    val motionLayout: MotionLayout by lazy { findViewById(R.id.parent) }
+    val ivBack: View by lazy { findViewById(R.id.ivBack) }
+    val search: SearchView by lazy { findViewById(R.id.search) }
+    var isloadMore = false
+    var index = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val vnpayLaunch = VnpayLaunch(this, lifecycle)
         vnpayLaunch.registerPermission()
         vnpayLaunch.register()
+        with(window) {
+            requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+            exitTransition = Explode()
+        }
         setContentView(R.layout.activity_main)
-        val parent = findViewById<ConstraintLayout>(R.id.parent)
-        val button = findViewById<Button>(R.id.button)
-        val text = findViewById<EditText>(R.id.text)
+        updateList()
+        recycleview.adapter = adapterMain
 
-        parent.setOnTouchListener(object : VNPOnSwipeTouchListener(this){
-            override fun onSwipeRight() {
-                Log.d("quocbao","onSwipeRight")
-            }
+        search.setOnClickListener {
+            motionLayout.setTransition(R.id.start,R.id.end2)
+            motionLayout.setTransitionDuration(500)
+            motionLayout.transitionToEnd()
+        }
+        ivBack.setOnClickListener {
+            motionLayout.setTransitionDuration(500)
+            motionLayout.setTransition(R.id.end2,R.id.start)
+            motionLayout.transitionToStart()
+            motionLayout.setTransition(R.id.start,R.id.end)
+        }
+    }
 
-            override fun onSwipeLeft() {
-                Log.d("quocbao","onSwipeLeft")
-            }
+    private fun loadMore() {
+//        recycleview.loadMore(
+//            loadMoreFirst = {
+//                if (!isloadMore) {
+//                    isloadMore = true
+//                    insertFirst()
+//                }
+//            },
+//            loadMoreLast = {
+//                if (!isloadMore) {
+//                    isloadMore = true
+//                    insertLast()
+//                }
+//            })
+    }
 
-            override fun onSwipeTop() {
-                Log.d("quocbao","onSwipeTop")
+    private fun insertLast() {
+        recycleview.postDelayed({
+            if(adapterMain.isEmptyCacheLast())
+                adapterMain.insertList(getData())
+            else
+                adapterMain.insertLastCache()
+            isloadMore = false
+        }, 1)
+    }
 
-            }
+    private fun insertFirst() {
+        recycleview.postDelayed({
+            adapterMain.insertFirst()
+            isloadMore = false
+        }, 1000)
+    }
 
-            override fun onSwipeBottom() {
-                Log.d("quocbao","onSwipeBottom")
+    private fun updateList() {
+        recycleview.postDelayed({
+            adapterMain.updateList(getData())
+            isloadMore = false
+        }, 1)
+    }
 
-            }
-
-        })
+    fun getData(): MutableList<ModelImage> {
+        val list: MutableList<ModelImage> = mutableListOf()
+        for (i in index..index+10) {
+            list.add(
+                ModelImage(
+                    R.drawable.hinh3,
+                    R.drawable.hinh3.toString(),
+                    "http://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4",
+                    i.toString()
+                ),
+            )
+        }
+        index += list.size
+        return list
     }
 }

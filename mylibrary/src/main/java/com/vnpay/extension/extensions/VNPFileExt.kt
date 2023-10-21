@@ -144,7 +144,7 @@ object VNPFileExt {
         }
     }
 
-    fun writeFile(fileName: String?, data: String) {
+    private fun writeFile(fileName: String?, data: String) {
         var out: FileOutputStream? = null
         try {
             out = FileOutputStream(fileName)
@@ -161,7 +161,7 @@ object VNPFileExt {
         }
     }
 
-    fun writeFile(fileName: String?, bm: Bitmap?) {
+    private fun writeFile(fileName: String?, bm: Bitmap?) {
         var out: FileOutputStream? = null
         try {
             out = FileOutputStream(fileName)

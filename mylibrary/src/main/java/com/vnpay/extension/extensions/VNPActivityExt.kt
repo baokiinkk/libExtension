@@ -33,32 +33,6 @@ object VNPActivityExt {
         startActivity(sendIntent)
     }
 
-    fun FragmentActivity.requestPermission(
-        permissions: Array<String>,
-        requestCode: Int,
-        onAction: (() -> Unit)? = null,
-    ) {
-        val permissionsToRequest = mutableListOf<String>()
-        permissions.forEach { permission ->
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissionsToRequest.add(permission)
-            }
-        }
-        if (permissionsToRequest.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                this,
-                permissionsToRequest.toTypedArray(),
-                requestCode
-            )
-        } else {
-            onAction?.invoke()
-        }
-    }
-
     fun FragmentActivity.openPhoneNumber(phone: String) {
         val intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:$phone")
@@ -126,4 +100,34 @@ object VNPActivityExt {
 
     fun FragmentActivity.getDeviceId() =
         Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID).orEmpty()
+
+
+
+
+    //authen:Thanh Nguyễn
+    // flow : main ->A ->B -> C -> D ->A
+    // output: onDestroy c ->onDestroy B->onDestroy A->onDestroy Main ->onCreate A ->onDestroy D
+    fun Intent.popAndNewTask() {
+        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    // flow : main ->A ->B -> C -> D -> A
+    // output: onDestroy c ->onDestroy B ->onDestroy A->onCreate A -> onDestroy D
+    fun Intent.popAndNewScreen() {
+        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    }
+
+    // flow : main ->A ->B -> C -> D->A
+    // output: main ->A ->B -> C -> D -> A  -> luôn luôn tạo mới 1 activity trên top của task
+    fun Intent.startSingleTop() {
+        addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
+    }
+
+    // flow : main ->A ->B -> C -> D->
+    // output: onDestroy C ->onDestroy B ->onNewIntent A -> onDestroy D
+    fun Intent.popAndKeepScreen() {
+        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
+    }
 }

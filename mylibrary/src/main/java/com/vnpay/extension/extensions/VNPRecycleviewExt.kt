@@ -61,13 +61,19 @@ object VNPRecycleviewExt {
     fun RecyclerView.getLastVisibleItemPosition() =
         (layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
-    fun RecyclerView.loadMore(loadMore: (Int) -> Unit) {
+    fun RecyclerView.loadMore(loadMoreLast: (Int) -> Unit,loadMoreFirst: (Int) -> Unit) {
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val lastVisibleItemPosition = getLastVisibleItemPosition()
-                if (dy > 0)
-                    loadMore(lastVisibleItemPosition)
+                val firstVisibleItemPosition = getFirstVisibleItemPosition()
+                val mLayoutManager = layoutManager
+                val visibleItemCount = mLayoutManager?.childCount
+                val totalItemCount = mLayoutManager?.itemCount
+                if (dy > 0 && lastVisibleItemPosition + (visibleItemCount ?: 0) >= (totalItemCount ?: 0))
+                    loadMoreLast(lastVisibleItemPosition)
+                if(dy < 0 && firstVisibleItemPosition - (visibleItemCount ?: 0) <= 0)
+                    loadMoreFirst(firstVisibleItemPosition)
             }
         })
     }

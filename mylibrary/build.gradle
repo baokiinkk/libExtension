@@ -20,7 +20,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
-
+    buildFeatures{
+        dataBinding = true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -46,6 +48,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     dependencies.implementation "com.google.code.gson:gson:$gson_version"
     dependencies.implementation "com.squareup.retrofit2:converter-gson:$gson_converter_version"
+    dependencies.implementation "io.coil-kt:coil:1.2.1"
+    dependencies.implementation "io.coil-kt:coil-gif:1.2.1"
 }
 
 

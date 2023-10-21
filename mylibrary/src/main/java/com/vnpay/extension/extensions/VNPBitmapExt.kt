@@ -221,31 +221,32 @@ object VNPBitmapExt {
 
 
     fun savePhotoFromBitmap(context: Context, bitmap: Bitmap?): String? {
-        try {
-            val FILE_SAVE =
-                Environment.getExternalStorageDirectory().absolutePath +
-                        "/screenshot/"
-            val mDir = File(FILE_SAVE)
-            if (!mDir.exists()) mDir.mkdirs()
-            var pathSaveImage: String? =
-                FILE_SAVE + UUID.randomUUID().toString() + Calendar.getInstance().time + ".jpg"
-            val mFile = File(pathSaveImage)
-            val pathShare = if (mFile.exists()) {
-                VNPFileExt.writeFile(pathSaveImage, bitmap)
-                MediaStore.Images.Media.insertImage(
-                    context.contentResolver,
-                    pathSaveImage, "screenshot " + Calendar.getInstance().time, "drawing"
-                )
-            } else {
-                MediaStore.Images.Media.insertImage(
-                    context.contentResolver,
-                    bitmap, "screenshot " + Calendar.getInstance().time, null
-                )
-            }
-            return pathShare
-        } catch (e: java.lang.Exception) {
-            return null
-        }
+        return null
+//        try {
+//            val FILE_SAVE =
+//                Environment.getExternalStorageDirectory().absolutePath +
+//                        "/screenshot/"
+//            val mDir = File(FILE_SAVE)
+//            if (!mDir.exists()) mDir.mkdirs()
+//            var pathSaveImage: String? =
+//                FILE_SAVE + UUID.randomUUID().toString() + Calendar.getInstance().time + ".jpg"
+//            val mFile = File(pathSaveImage)
+//            val pathShare = if (mFile.exists()) {
+//                VNPFileExt.writeFile(pathSaveImage, bitmap)
+//                MediaStore.Images.Media.insertImage(
+//                    context.contentResolver,
+//                    pathSaveImage, "screenshot " + Calendar.getInstance().time, "drawing"
+//                )
+//            } else {
+//                MediaStore.Images.Media.insertImage(
+//                    context.contentResolver,
+//                    bitmap, "screenshot " + Calendar.getInstance().time, null
+//                )
+//            }
+//            return pathShare
+//        } catch (e: java.lang.Exception) {
+//            return null
+//        }
     }
     fun savePhotoFromView(context: Context,view: View){
         val bitmap = getBitmapFromView(view,context)
