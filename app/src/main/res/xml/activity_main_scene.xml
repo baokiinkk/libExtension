@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
     <Transition
+        android:id="@+id/transaction1"
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="200">
@@ -12,6 +13,25 @@
             motion:touchAnchorId="@+id/recycleview"
             motion:dragDirection="dragUp"
             motion:touchAnchorSide="top" />
+    </Transition>
+    <Transition
+        android:id="@+id/transaction2"
+        motion:constraintSetEnd="@+id/end2"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+        <KeyFrameSet>
+        </KeyFrameSet>
+        <OnClick motion:clickAction="transitionToEnd" motion:targetId="@+id/search"/>
+    </Transition>
+
+    <Transition
+        android:id="@+id/transaction3"
+        motion:constraintSetEnd="@+id/start"
+        motion:constraintSetStart="@id/end2"
+        motion:duration="1000">
+        <KeyFrameSet>
+        </KeyFrameSet>
+        <OnClick motion:clickAction="transitionToEnd" motion:targetId="@+id/ivBack"/>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">

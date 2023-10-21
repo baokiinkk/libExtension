@@ -38,17 +38,17 @@ class MainActivity : AppCompatActivity() {
         updateList()
         recycleview.adapter = adapterMain
 
-        search.setOnClickListener {
-            motionLayout.setTransition(R.id.start,R.id.end2)
-            motionLayout.setTransitionDuration(500)
-            motionLayout.transitionToEnd()
-        }
-        ivBack.setOnClickListener {
-            motionLayout.setTransitionDuration(500)
-            motionLayout.setTransition(R.id.end2,R.id.start)
-            motionLayout.transitionToStart()
-            motionLayout.setTransition(R.id.start,R.id.end)
-        }
+//        search.setOnClickListener {
+//            motionLayout.setTransition(R.id.start,R.id.end2)
+//            motionLayout.setTransitionDuration(500)
+//            motionLayout.transitionToEnd()
+//        }
+//        ivBack.setOnClickListener {
+//            motionLayout.setTransitionDuration(500)
+//            motionLayout.setTransition(R.id.end,R.id.start)
+//            motionLayout.transitionToStart()
+//            motionLayout.setTransition(R.id.transaction1)
+//        }
     }
 
     private fun loadMore() {
